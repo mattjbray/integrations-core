@@ -1,5 +1,12 @@
 # CHANGELOG - oracle
 
+1.1.0 / Unreleased
+==================
+
+### Changes
+
+* [FEATURE] adds custom tag support to service checks.
+
 1.0.1 / Unreleased 
 ==================
 

@@ -62,7 +62,7 @@ class Oracle(AgentCheck):
         if not server or not user:
             raise Exception("Oracle host and user are needed")
 
-        con = self._get_connection(server, user, password, service)
+        con = self._get_connection(server, user, password, service, tags)
 
         self._get_sys_metrics(con, tags)
         self._get_tablespace_metrics(con, tags)
@@ -75,10 +75,10 @@ class Oracle(AgentCheck):
         tags = instance.get('tags', [])
         return (self.server, user, password, service, tags)
 
-    def _get_connection(self, server, user, password, service):
+    def _get_connection(self, server, user, password, service, tags):
         self.service_check_tags = [
             'server:%s' % server
-        ]
+        ] + tags
         connect_string = '{0}/{1}@//{2}/{3}'.format(user, password, server, service)
         try:
             con = cx_Oracle.connect(connect_string)
