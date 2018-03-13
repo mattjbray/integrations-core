@@ -1,5 +1,12 @@
 # CHANGELOG - nginx
 
+1.3.0 / Unreleased
+==================
+
+### Changes
+
+* [FEATURE] Add custom tag support to service checks.
+
 1.2.0 / 2018-02-13
 ==================
 
