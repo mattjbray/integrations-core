@@ -300,13 +300,15 @@ class SparkCheck(AgentCheckTest):
     YARN_CONFIG = {
         'spark_url': 'http://localhost:8088',
         'cluster_name': CLUSTER_NAME,
-        'spark_cluster_mode': 'spark_yarn_mode'
+        'spark_cluster_mode': 'spark_yarn_mode',
+        'tags': ['optional:tag1']
     }
 
     MESOS_CONFIG = {
         'spark_url': 'http://localhost:5050',
         'cluster_name': CLUSTER_NAME,
-        'spark_cluster_mode': 'spark_mesos_mode'
+        'spark_cluster_mode': 'spark_mesos_mode',
+        'tags': ['instance:mytag']
     }
 
     MESOS_FILTERED_CONFIG = {
@@ -491,49 +493,49 @@ class SparkCheck(AgentCheckTest):
         for metric, value in self.SPARK_JOB_RUNNING_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_JOB_RUNNING_METRIC_TAGS)
+                tags=self.SPARK_JOB_RUNNING_METRIC_TAGS + ['optional:tag1'])
 
         # Check the succeeded job metrics
         for metric, value in self.SPARK_JOB_SUCCEEDED_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_JOB_SUCCEEDED_METRIC_TAGS)
+                tags=self.SPARK_JOB_SUCCEEDED_METRIC_TAGS + ['optional:tag1'])
 
         # Check the running stage metrics
         for metric, value in self.SPARK_STAGE_RUNNING_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_STAGE_RUNNING_METRIC_TAGS)
+                tags=self.SPARK_STAGE_RUNNING_METRIC_TAGS + ['optional:tag1'])
 
         # Check the complete stage metrics
         for metric, value in self.SPARK_STAGE_COMPLETE_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_STAGE_COMPLETE_METRIC_TAGS)
+                tags=self.SPARK_STAGE_COMPLETE_METRIC_TAGS + ['optional:tag1'])
 
         # Check the driver metrics
         for metric, value in self.SPARK_DRIVER_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_METRIC_TAGS)
+                tags=self.SPARK_METRIC_TAGS + ['optional:tag1'])
 
         # Check the executor metrics
         for metric, value in self.SPARK_EXECUTOR_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_METRIC_TAGS)
+                tags=self.SPARK_METRIC_TAGS + ['optional:tag1'])
 
         # Check the RDD metrics
         for metric, value in self.SPARK_RDD_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_METRIC_TAGS)
+                tags=self.SPARK_METRIC_TAGS + ['optional:tag1'])
 
         # Check the service tests
         self.assertServiceCheckOK(YARN_SERVICE_CHECK,
-            tags=['url:http://localhost:8088'])
+            tags=['url:http://localhost:8088', 'optional:tag1'])
         self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
-            tags=['url:http://localhost:8088'])
+            tags=['url:http://localhost:8088', 'optional:tag1'])
 
 
     @mock.patch('requests.get', side_effect=mesos_requests_get_mock)
@@ -548,49 +550,49 @@ class SparkCheck(AgentCheckTest):
         for metric, value in self.SPARK_JOB_RUNNING_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_JOB_RUNNING_METRIC_TAGS)
+                tags=self.SPARK_JOB_RUNNING_METRIC_TAGS + ['instance:mytag'])
 
         # Check the succeeded job metrics
         for metric, value in self.SPARK_JOB_SUCCEEDED_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_JOB_SUCCEEDED_METRIC_TAGS)
+                tags=self.SPARK_JOB_SUCCEEDED_METRIC_TAGS + ['instance:mytag'])
 
         # Check the running stage metrics
         for metric, value in self.SPARK_STAGE_RUNNING_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_STAGE_RUNNING_METRIC_TAGS)
+                tags=self.SPARK_STAGE_RUNNING_METRIC_TAGS + ['instance:mytag'])
 
         # Check the complete stage metrics
         for metric, value in self.SPARK_STAGE_COMPLETE_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_STAGE_COMPLETE_METRIC_TAGS)
+                tags=self.SPARK_STAGE_COMPLETE_METRIC_TAGS + ['instance:mytag'])
 
         # Check the driver metrics
         for metric, value in self.SPARK_DRIVER_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_METRIC_TAGS)
+                tags=self.SPARK_METRIC_TAGS + ['instance:mytag'])
 
         # Check the executor metrics
         for metric, value in self.SPARK_EXECUTOR_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_METRIC_TAGS)
+                tags=self.SPARK_METRIC_TAGS + ['instance:mytag'])
 
         # Check the RDD metrics
         for metric, value in self.SPARK_RDD_METRIC_VALUES.iteritems():
             self.assertMetric(metric,
                 value=value,
-                tags=self.SPARK_METRIC_TAGS)
+                tags=self.SPARK_METRIC_TAGS + ['instance:mytag'])
 
         # Check the service tests
         self.assertServiceCheckOK(MESOS_SERVICE_CHECK,
-            tags=['url:http://localhost:5050'])
+            tags=['url:http://localhost:5050', 'instance:mytag'])
         self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
-            tags=['url:http://localhost:4040'])
+            tags=['url:http://localhost:4040', 'instance:mytag'])
 
         self.coverage_report()
 
