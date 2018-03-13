@@ -1,9 +1,10 @@
 # CHANGELOG - mysql
 
-1.1.3 / Unreleased
+1.2.0 / Unreleased
 ==================
 ### Changes
 
+* [FEATURE] Add custom tag support to service checks.
 * [BUGFIX] Fixes the buffer pool metric to return the aggregated values
 
 1.1.2 / 2018-02-13

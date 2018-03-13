@@ -297,7 +297,7 @@ class MySql(AgentCheck):
             raise Exception("Mysql host and user are needed.")
 
         with self._connect(host, port, mysql_sock, user,
-                           password, defaults_file, ssl, connect_timeout) as db:
+                           password, defaults_file, ssl, connect_timeout, tags) as db:
             try:
                 # Metadata collection
                 self._collect_metadata(db, host)
@@ -358,11 +358,13 @@ class MySql(AgentCheck):
         return hostkey
 
     @contextmanager
-    def _connect(self, host, port, mysql_sock, user, password, defaults_file, ssl, connect_timeout):
+    def _connect(self, host, port, mysql_sock, user, password, defaults_file, ssl, connect_timeout, tags):
         self.service_check_tags = [
             'server:%s' % (mysql_sock if mysql_sock != '' else host),
             'port:%s' % ('unix_socket' if port == 0 else port)
         ]
+
+        self.service_check_tags.extend(tags)
 
         db = None
         try:
@@ -378,7 +380,7 @@ class MySql(AgentCheck):
                 self.service_check_tags = [
                     'server:{0}'.format(mysql_sock),
                     'port:unix_socket'
-                ]
+                ] + tags
                 db = pymysql.connect(
                     unix_socket=mysql_sock,
                     user=user,
@@ -403,6 +405,7 @@ class MySql(AgentCheck):
                     connect_timeout=connect_timeout
                 )
             self.log.debug("Connected to MySQL")
+            self.service_check_tags = list(set(self.service_check_tags))
             self.service_check(self.SERVICE_CHECK_NAME, AgentCheck.OK,
                                tags=self.service_check_tags)
             yield db
