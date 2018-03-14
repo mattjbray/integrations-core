@@ -338,7 +338,7 @@ class SparkCheck(AgentCheck):
 
                 # Parse through the HTML to grab the application driver's link
                 try:
-                    app_url = self._get_standalone_app_url(app_id, spark_master_address, ssl_config)
+                    app_url = self._get_standalone_app_url(app_id, spark_master_address, ssl_config, tags)
 
                     if app_id and app_name and app_url:
                         if pre_20_mode:
@@ -416,7 +416,7 @@ class SparkCheck(AgentCheck):
 
         return running_apps
 
-    def _get_standalone_app_url(self, app_id, spark_master_address, ssl_config):
+    def _get_standalone_app_url(self, app_id, spark_master_address, ssl_config, tags):
         '''
         Return the application URL from the app info page on the Spark master.
         Due to a bug, we need to parse the HTML manually because we cannot
@@ -426,6 +426,7 @@ class SparkCheck(AgentCheck):
             SPARK_MASTER_APP_PATH,
             SPARK_STANDALONE_SERVICE_CHECK,
             ssl_config,
+            tags
             appId=app_id)
 
         dom = BeautifulSoup(app_page.text, 'html.parser')
