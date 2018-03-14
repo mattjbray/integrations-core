@@ -371,6 +371,7 @@ class SparkCheck(AgentCheck):
         '''
         running_apps = {}
         tags = instance.get('tags', [])
+        tags.append('cluster_name:%s' % cluster_name)
 
         metrics_json = self._rest_request_to_json(master_address,
             MESOS_MASTER_APP_PATH,
