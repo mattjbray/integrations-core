@@ -314,7 +314,7 @@ class SparkCheck(AgentCheck):
 
 
         elif cluster_mode == SPARK_YARN_MODE:
-            running_apps = self._yarn_init(master_address, ssl_config, tags)
+            running_apps = self._yarn_init(master_address, ssl_config, custom_tags)
             return self._get_spark_app_ids(running_apps, ssl_config, custom_tags)
 
         else:
