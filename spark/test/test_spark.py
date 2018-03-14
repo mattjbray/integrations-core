@@ -533,9 +533,9 @@ class SparkCheck(AgentCheckTest):
 
         # Check the service tests
         self.assertServiceCheckOK(YARN_SERVICE_CHECK,
-            tags=['url:http://localhost:8088', 'optional:tag1', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:8088', 'optional:tag1'])
         self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
-            tags=['url:http://localhost:8088', 'optional:tag1', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:8088', 'optional:tag1'])
 
 
     @mock.patch('requests.get', side_effect=mesos_requests_get_mock)
@@ -605,7 +605,7 @@ class SparkCheck(AgentCheckTest):
 
         self.run_check(config)
         self.assertServiceCheckOK(MESOS_SERVICE_CHECK,
-            tags=['url:http://localhost:5050', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:5050'])
 
         self.coverage_report()
 
@@ -667,9 +667,9 @@ class SparkCheck(AgentCheckTest):
 
         # Check the service tests
         self.assertServiceCheckOK(STANDALONE_SERVICE_CHECK,
-            tags=['url:http://localhost:8080', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:8080'])
         self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
-            tags=['url:http://localhost:4040', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:4040'])
 
     @mock.patch('requests.get', side_effect=standalone_requests_pre20_get_mock)
     def test_standalone_pre20(self, mock_requests):
@@ -729,9 +729,9 @@ class SparkCheck(AgentCheckTest):
 
         # Check the service tests
         self.assertServiceCheckOK(STANDALONE_SERVICE_CHECK,
-            tags=['url:http://localhost:8080', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:8080'])
         self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
-            tags=['url:http://localhost:4040', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:4040'])
 
     def test_ssl(self):
         self.run_ssl_server()
