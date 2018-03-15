@@ -426,7 +426,7 @@ class SparkCheck(AgentCheck):
             SPARK_MASTER_APP_PATH,
             SPARK_STANDALONE_SERVICE_CHECK,
             ssl_config,
-            tags
+            tags,
             appId=app_id)
 
         dom = BeautifulSoup(app_page.text, 'html.parser')
