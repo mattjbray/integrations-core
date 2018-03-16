@@ -304,16 +304,16 @@ class SparkCheck(AgentCheck):
         if cluster_mode == SPARK_STANDALONE_MODE:
             # check for PRE-20
             pre20 = _is_affirmative(instance.get(SPARK_PRE_20_MODE, False))
-            return self._standalone_init(master_address, pre20, ssl_config, tags)
+            return self._standalone_init(master_address, pre20, ssl_config, custom_tags)
 
         elif cluster_mode == SPARK_MESOS_MODE:
-            running_apps = self._mesos_init(instance, master_address, ssl_config, tags)
-            return self._get_spark_app_ids(running_apps, ssl_config, tags)
+            running_apps = self._mesos_init(instance, master_address, ssl_config, custom_tags)
+            return self._get_spark_app_ids(running_apps, ssl_config, custom_tags)
 
 
         elif cluster_mode == SPARK_YARN_MODE:
-            running_apps = self._yarn_init(master_address, ssl_config, tags)
-            return self._get_spark_app_ids(running_apps, ssl_config, tags)
+            running_apps = self._yarn_init(master_address, ssl_config, custom_tags)
+            return self._get_spark_app_ids(running_apps, ssl_config, custom_tags)
 
         else:
             raise Exception('Invalid setting for %s. Received %s.' % (SPARK_CLUSTER_MODE,
