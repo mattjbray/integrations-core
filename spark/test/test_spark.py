@@ -590,9 +590,9 @@ class SparkCheck(AgentCheckTest):
 
         # Check the service tests
         self.assertServiceCheckOK(MESOS_SERVICE_CHECK,
-            tags=['url:http://localhost:5050', 'instance:mytag', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:5050', 'instance:mytag'])
         self.assertServiceCheckOK(SPARK_SERVICE_CHECK,
-            tags=['url:http://localhost:4040', 'instance:mytag', 'cluster_name:SparkCluster'])
+            tags=['url:http://localhost:4040', 'instance:mytag'])
 
         self.coverage_report()
 
