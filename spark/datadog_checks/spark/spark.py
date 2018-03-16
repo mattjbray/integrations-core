@@ -213,6 +213,9 @@ class SparkCheck(AgentCheck):
     def check(self, instance):
         # Get additional tags from the conf file
         tags = instance.get('tags', [])
+        cluster_name = instance.get('cluster_name')
+        if cluster_name is None:
+            raise Exception('The cluster_name must be specified in the instance configuration')
 
         ssl_config = self._get_ssl_config(instance)
 
