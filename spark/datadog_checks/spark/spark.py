@@ -307,7 +307,7 @@ class SparkCheck(AgentCheck):
             return self._standalone_init(master_address, pre20, ssl_config, custom_tags)
 
         elif cluster_mode == SPARK_MESOS_MODE:
-            running_apps = self._mesos_init(instance, master_address, ssl_config)
+            running_apps = self._mesos_init(instance, master_address, ssl_config, custom_tags)
             return self._get_spark_app_ids(running_apps, ssl_config, custom_tags)
 
 
@@ -363,12 +363,11 @@ class SparkCheck(AgentCheck):
         self.log.info("Returning running apps %s" % running_apps)
         return running_apps
 
-    def _mesos_init(self, instance, master_address, ssl_config):
+    def _mesos_init(self, instance, master_address, ssl_config, tags):
         '''
         Return a dictionary of {app_id: (app_name, tracking_url)} for running Spark applications.
         '''
         running_apps = {}
-        tags = instance.get('tags', [])
 
         metrics_json = self._rest_request_to_json(master_address,
             MESOS_MASTER_APP_PATH,
