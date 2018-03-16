@@ -238,7 +238,7 @@ class SparkCheck(AgentCheck):
 
             self.service_check(SPARK_SERVICE_CHECK,
                 AgentCheck.OK,
-                tags=['url:%s' % am_address] + tags,
+                tags=['url:%s' % am_address, 'cluster_name:%s' % cluster_name] + tags,
                 message='Connection to ApplicationMaster "%s" was successful' % am_address)
 
     def _get_ssl_config(self, instance):
