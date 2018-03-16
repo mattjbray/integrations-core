@@ -291,7 +291,8 @@ class SparkCheck(AgentCheck):
         cluster_name = instance.get('cluster_name')
         if cluster_name is None:
             raise Exception('The cluster_name must be specified in the instance configuration')
-        custom_tags = tags + ['cluster_name:%s' % cluster_name]
+        custom_tags = list(tags) 
+        tags.append('cluster_name:%s' % cluster_name)
 
         # Determine the cluster mode
         cluster_mode = instance.get(SPARK_CLUSTER_MODE)
