@@ -213,7 +213,6 @@ class SparkCheck(AgentCheck):
     def check(self, instance):
         # Get additional tags from the conf file
         tags = instance.get('tags', [])
-        tags = list(set(tags)) if tags is not None else []
 
         ssl_config = self._get_ssl_config(instance)
 
