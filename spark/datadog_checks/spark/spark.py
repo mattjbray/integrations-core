@@ -213,11 +213,11 @@ class SparkCheck(AgentCheck):
     def check(self, instance):
         # Get additional tags from the conf file
         tags = instance.get('tags', [])
+        ssl_config = self._get_ssl_config(instance)
         cluster_name = instance.get('cluster_name')
         if cluster_name is None:
             raise Exception('The cluster_name must be specified in the instance configuration')
-
-        ssl_config = self._get_ssl_config(instance)
+        tags.append('cluster_name:%s' % cluster_name)
 
         spark_apps = self._get_running_apps(instance, tags, ssl_config)
 
@@ -241,7 +241,7 @@ class SparkCheck(AgentCheck):
 
             self.service_check(SPARK_SERVICE_CHECK,
                 AgentCheck.OK,
-                tags=['url:%s' % am_address, 'cluster_name:%s' % cluster_name] + tags,
+                tags=['url:%s' % am_address] + tags,
                 message='Connection to ApplicationMaster "%s" was successful' % am_address)
 
     def _get_ssl_config(self, instance):
@@ -294,9 +294,8 @@ class SparkCheck(AgentCheck):
         cluster_name = instance.get('cluster_name')
         if cluster_name is None:
             raise Exception('The cluster_name must be specified in the instance configuration')
-        custom_tags = list(tags) 
         tags.append('cluster_name:%s' % cluster_name)
-
+        tags = list(set(tags))
         # Determine the cluster mode
         cluster_mode = instance.get(SPARK_CLUSTER_MODE)
         if cluster_mode is None:
@@ -307,16 +306,16 @@ class SparkCheck(AgentCheck):
         if cluster_mode == SPARK_STANDALONE_MODE:
             # check for PRE-20
             pre20 = _is_affirmative(instance.get(SPARK_PRE_20_MODE, False))
-            return self._standalone_init(master_address, pre20, ssl_config, custom_tags)
+            return self._standalone_init(master_address, pre20, ssl_config, tags)
 
         elif cluster_mode == SPARK_MESOS_MODE:
-            running_apps = self._mesos_init(instance, master_address, ssl_config, custom_tags)
-            return self._get_spark_app_ids(running_apps, ssl_config, custom_tags)
+            running_apps = self._mesos_init(instance, master_address, ssl_config, tags)
+            return self._get_spark_app_ids(running_apps, ssl_config, tags)
 
 
         elif cluster_mode == SPARK_YARN_MODE:
-            running_apps = self._yarn_init(master_address, ssl_config, custom_tags)
-            return self._get_spark_app_ids(running_apps, ssl_config, custom_tags)
+            running_apps = self._yarn_init(master_address, ssl_config, tags)
+            return self._get_spark_app_ids(running_apps, ssl_config, tags)
 
         else:
             raise Exception('Invalid setting for %s. Received %s.' % (SPARK_CLUSTER_MODE,
